@@ -23,7 +23,7 @@ const transactionTypeOptions = [
 
 class MoneyManager extends Component {
   state = {
-    yourbalance: 0,
+    yourBalance: 0,
     Expenses: 0,
     Income: 0,
     title: '',
@@ -54,18 +54,35 @@ class MoneyManager extends Component {
       amount,
       type,
     }
-    this.setState(prevState =>
-      this.setState({
-        TransactionsList: [...prevState.TransactionsList, newTransaction],
-        title: '',
-        amount: '',
-      }),
-    )
+
+    this.setState(prevState => ({
+      TransactionsList: [...prevState.TransactionsList, newTransaction],
+      title: '',
+      amount: '',
+    }))
+  }
+
+  getAmounts = () => {
+    const {TransactionsList} = this.state
+    let TransactionAmount
+    TransactionsList.map(each => {
+      if (each.type === 'Expenses') {
+        TransactionAmount = this.setState(prevState => ({
+          Expenses: prevState.Expenses + parseInt(each.amount),
+        }))
+      } else if (each.type === 'Income') {
+        TransactionAmount = this.setState(prevState => ({
+          Income: prevState.Income + parseInt(each.amount),
+        }))
+      }
+
+      return TransactionAmount
+    })
   }
 
   render() {
     const {
-      yourbalance,
+      yourBalance,
       Expenses,
       Income,
       title,
@@ -84,7 +101,7 @@ class MoneyManager extends Component {
         </div>
         <div className="c">
           <MoneyDetails
-            balance={yourbalance}
+            balance={yourBalance}
             expenses={Expenses}
             income={Income}
           />
@@ -117,14 +134,14 @@ class MoneyManager extends Component {
                 {transactionTypeOptions.map(each => (
                   <option
                     key={each.optionId}
-                    value={each.displayText}
+                    value={each.optionId}
                     className="options"
                   >
                     {each.displayText}
                   </option>
                 ))}
               </select>
-              <button type="submit" onClick={this.expensesAmount}>
+              <button type="submit" onClick={this.getAmounts}>
                 Add
               </button>
             </form>
@@ -136,9 +153,9 @@ class MoneyManager extends Component {
                 <p>Amount</p>
                 <p>Type</p>
               </div>
-
+              <h1 className="head">History</h1>
               {TransactionsList.map(each => (
-                <TransactionItem TransactionDetails={each} key={each.id} />
+                <TransactionItem transactionDetails={each} key={each.id} />
               ))}
             </ul>
           </div>

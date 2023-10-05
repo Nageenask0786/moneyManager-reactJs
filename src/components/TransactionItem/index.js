@@ -1,8 +1,8 @@
 import './index.css'
 
 const TransactionItem = props => {
-  const {TransactionDetails} = props
-  const {title, amount, type} = TransactionDetails
+  const {transactionDetails} = props
+  const {title, amount, type} = transactionDetails
   return (
     <li className="list-items">
       <p className="item">{title}</p>
